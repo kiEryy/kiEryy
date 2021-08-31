@@ -1,0 +1,170 @@
+/* Tic-tac-toe
+  Using C language
+  by: kiEry */
+#include <stdio.h>
+#define MAX_PLAYS 9
+int slot_marker(char board[], int slot,char marker){
+	
+		if(slot == 1 && board[0] == ' '){
+			board[0]=marker;
+		}
+		else if (slot == 2 && board[2]== ' '){
+			board[2]=marker;
+		}
+		else if (slot == 3 && board[4]== ' '){
+			board[4]=marker;
+		}
+		else if (slot == 4 && board[10]== ' '){
+			board[10]=marker;
+		}
+		else if (slot == 5 && board[12]== ' '){
+			board[12]=marker;
+		}
+		else if (slot == 6 && board[14]== ' '){
+			board[14]=marker;
+		}
+		else if (slot == 7 && board[20]== ' '){
+			board[20]=marker;
+		}
+		else if (slot == 8 && board[22]== ' '){
+			board[22]=marker;
+		}
+		else if (slot == 9 && board[24]== ' '){
+			board[24]=marker;
+		}
+		else {
+			printf("POSITION OCCUPIED!\n");
+			return 1;
+		}
+		return 0;
+}
+void print_board(char *pboard){
+
+	for(int i=0;i<5;i++){
+		for(int j=0;j<5;j++){
+				printf("%c",*pboard);
+				pboard=pboard + sizeof(char);
+			}
+			printf("\n");
+	}
+}
+void display_tuto(){
+	printf("HOW TO PLAY \n");
+	printf("INSERT NUMBER [1-9]\n");
+	printf("EACH NUMBER REPRESENTS A SQUARE\n");
+	char tuto_board[25]={'1','|','2','|','3','-','+','-','+','-','4','|','5','|','6','-','+','-','+','-','7','|','8','|','9'};
+	char *ptuto_board;
+	ptuto_board=&tuto_board[0];
+	print_board(ptuto_board);
+}
+int win_check(char board[], char marker){
+	
+	int pl=0; // variable to identifies whom is playing
+	if(marker=='X'){
+		pl=1;
+	}
+	else pl=2;
+	
+	if(board[0]== marker && board[2] == marker && board[4] == marker){ // 1st line
+		return pl;// return identifies which player won -> return = 1 = P1 && return = 2 = P2
+	}
+	else if(board[10]== marker && board[12] == marker && board[14] == marker){ // 2nd line
+		return pl;
+	}
+	else if(board[20]== marker && board[22] == marker && board[24] == marker){ // 3rd line
+		return pl;
+	}
+	else if(board[0]== marker && board[12] == marker && board[24] == marker){ // 1st diagonal
+		return pl;
+	}
+	else if(board[4]== marker && board[12] == marker && board[20] == marker){ //2nd diagonal
+		return pl;
+	}
+	else if(board[0]== marker && board[10] == marker && board[20] == marker){ // 1st column
+		return pl;
+	}
+	else if(board[2]== marker && board[12] == marker && board[22] == marker){ // 2nd column
+		return pl;
+	}
+	else if(board[4]== marker && board[14] == marker && board[24] == marker){ // 3rd column
+		return pl;
+	}
+}
+struct player_one{
+	char name[20];
+	int score;
+};
+struct player_two{
+	char name[20];
+	int score;
+};
+int	main(){
+	// VARIABLES	
+		
+		char board[25]={' ','|',' ','|',' ','-','+','-','+','-',' ','|',' ','|',' ','-','+','-','+','-',' ','|',' ','|',' '};
+		char *pboard;
+		pboard = &board[0]; // pointer to set markers
+	
+		int plays=0; // counts how many plays were made
+		int slot=0; // receives position
+	
+		char marker1,marker2;
+
+		struct player_one p1;
+		struct player_two p2;
+		p1.score = 0;
+		p2.score = 0;
+
+	// display_tuto
+		display_tuto();	// prints tutorial
+	
+	// NAMES
+	
+	printf("\nINSERT PLAYER ONE'S NAME: ");
+	scanf(" %19[^\n]",p1.name);
+	
+	printf("\nINSERT PLAYER TWO'S NAME: ");
+	scanf(" %19[^\n]",p2.name);
+	
+	// PLAYS
+	
+	while(1){
+
+		do{
+			printf("\n%s'S TURN: ",p1.name); 
+			marker1 = 'X';
+			scanf("%d",&slot);
+		}while(slot_marker(board,slot,marker1) == 1);
+
+		print_board(pboard);	// prints board with the marker set
+		
+		if(win_check(pboard,marker1)== 1){	// checks if P1 won
+		printf("%s'S WON THE GAME",p1.name);
+		p1.score++;
+		return 1;}
+		plays++;
+		
+		if(plays==MAX_PLAYS){
+			printf("DRAW!!"); // if P1 didn't won after plays == 9 then it's a draw
+			p1.score=p1.score+0.5;
+			p2.score=p2.score+0.5;
+			game_score(p1,p2);
+		}
+		
+		do{
+			printf("\n%s'S TURN: ",p2.name);  
+			marker2 = 'O';
+			scanf("%d",&slot);
+		}while(slot_marker(board,slot,marker2) == 1);
+
+		print_board(pboard);
+		
+		if(win_check(pboard,marker2)== 2){	// checks if P2 won
+		printf("%s'S WON THE GAME",p2.name);
+		p2.score++;
+		return 1;}
+
+		plays++;
+		}
+	return 0;
+}
