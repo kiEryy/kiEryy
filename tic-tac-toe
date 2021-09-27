@@ -1,6 +1,6 @@
 /* Tic-tac-toe
   Using C language
-  by: kiEry */
+  by: kiEryy */
 #include <stdio.h>
 #define MAX_PLAYS 9
 int slot_marker(char board[], int slot,char marker){
